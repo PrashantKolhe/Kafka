@@ -23,26 +23,30 @@ public class ProducerDemoWIthCallBack {
         //Create the producer
         KafkaProducer<String,String> producer = new KafkaProducer<String, String>(properties);
 
-        //Create producer record
-        ProducerRecord<String,String> record =new ProducerRecord<>("first_topic","hello world");
+        for (int i=0;i<10;i++){
 
-        //send data-async
-        producer.send(record, new Callback() {
-            @Override
-            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                //executes every time a record is successfully sent or exception is thrown
-                if(e==null){
-                    //a record is successfully sent
-                    logger.info("Received new meta data:+" +
-                            "Topic: "+recordMetadata.topic()+"\n" +
-                            "Partition: "+recordMetadata.partition()+"\n" +
-                            "Offset: "+recordMetadata.offset()+"\n" +
-                            "TimeStamp: "+recordMetadata.timestamp());
-                }else{
-                    logger.error("Error while producing",e);
+            //Create producer record
+            ProducerRecord<String,String> record =new ProducerRecord<>("first_topic","hello world "+i);
+
+            //send data-async
+            producer.send(record, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                    //executes every time a record is successfully sent or exception is thrown
+                    if(e==null){
+                        //a record is successfully sent
+                        logger.info("Received new meta data:+" +
+                                "Topic: "+recordMetadata.topic()+"\n" +
+                                "Partition: "+recordMetadata.partition()+"\n" +
+                                "Offset: "+recordMetadata.offset()+"\n" +
+                                "TimeStamp: "+recordMetadata.timestamp());
+                    }else{
+                        logger.error("Error while producing",e);
+                    }
                 }
-            }
-        });
+            });
+
+        }
 
         //flush data
         producer.flush();
