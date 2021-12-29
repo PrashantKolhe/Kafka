@@ -7,12 +7,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
-public class ProducerDemoWIthCallBack {
+public class ProducerDemoKeys {
 
     public static void main(String[] args) {
 
-        Logger logger = LoggerFactory.getLogger(ProducerDemoWIthCallBack.class);
+        Logger logger = LoggerFactory.getLogger(ProducerDemoKeys.class);
         String bootStrapServers="localhost:9092";
+
+        String topic="second_topic";
+        String key="key_";
+        String value="hello_world_";
 
         //create producer properties
         Properties properties=new Properties();
@@ -26,7 +30,7 @@ public class ProducerDemoWIthCallBack {
         for (int i=0;i<10;i++){
 
             //Create producer record
-            ProducerRecord<String,String> record =new ProducerRecord<>("second_topic","hello world "+i);
+            ProducerRecord<String,String> record =new ProducerRecord<>(topic,key+i,value+i);
 
             //send data-async
             producer.send(record, new Callback() {
